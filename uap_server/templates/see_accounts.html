@@ -1,0 +1,221 @@
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>User Accounts</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/templates/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="/templates/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/templates/css/sb-admin.css" rel="stylesheet">
+
+    <style>
+        #container {
+            height: 100%;
+            width: 100%;
+        }
+
+        #left-column {
+            float: left;
+            border: 1px;
+            width: 50%;
+            height: inherit;
+        }
+
+        #right-column {
+            float: left;
+            width: 50%;
+            display: block;
+            height: inherit;
+            padding: 6%;
+        }
+
+        #logoutForm {
+            position: absolute;
+            right: 10px;
+            top: 25%;
+        }
+
+        input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        #footer {
+            width: 100%;
+            position: fixed;
+            background-color: #0080ff;
+        }
+    </style>
+
+</head>
+
+<body id="page-top" style="background-color: lightgrey;">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand navbar-dark bg-primary static-top" id="navbar" style=" background-color: white">
+        <a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> User Authentication
+            Application</a>
+        <form action="/logout?_method=DELETE" method="post" id="logoutForm">
+            <i class="fas fa-sign-out-alt" style="color: white;"></i> <button type="submit"
+                style="color: white; text-align: left; border: none; background-color: transparent;">Logout</button>
+        </form>
+    </nav>
+
+    <div id="wrapper">
+
+        <!-- SIDEBAR -->
+        <ul class="sidebar navbar-nav navbar-dark" style="background-color: #333333;">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/link-account" style="color: white;">
+                    &nbsp<i class="fas fa-user-circle"></i>
+                    <span>&nbspLink Account</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/see-accounts" style="color: white;">
+                    &nbsp<i class="fas fa-fw fa-folder"></i>
+                    <span>&nbspSee Accounts</span></a>
+            </li>
+        </ul>
+
+        <div id="content-wrapper">
+
+            <div class="container-fluid">
+                {% if codeValue==2 %}
+                <div class="alert alert-danger" role="alert">
+                    An error has occured! Cannot fetch the user accounts at this time. Please try again later.
+                </div>
+                {% else %}
+                {% endif %}
+
+                <!-- USER INFO -->
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div id="container">
+
+                            <div id="left-column">
+
+                                <div class="container d-flex justify-content-left">
+                                    <div class="card p-4 mt-3">
+
+                                        <div class="first">
+                                            <h6 class="heading" style="text-align: center;">
+                                                All Linked Accounts
+                                            </h6>
+                                            <div
+                                                class="time d-flex flex-row align-items-center justify-content-between">
+                                            </div>
+
+                                            <div class="second">
+                                                <div class="image" style="text-align: center;"> <img
+                                                        src="/templates/imagens/person_icon.png" class="rounded-circle"
+                                                        width="75" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LISTING OF LINKED ACCOUNTS -->
+                    <div id="container">
+                        <table class="table" id="tableOfContents">
+                            <tr>
+                                <th style="text-align:center" scope="col">DNS</th>
+                                <th style="text-align:center" scope="col">Email</th>
+                            </tr>
+
+                            {% for items in allAccounts %}
+                            <tr>
+                                <td style="text-align:center">{{items[0]}}</td>
+                                <td style="text-align:center">{{items[1]}}</td>
+                                <td style="text-align:center">
+                                    <button class="btn btn-primary" onclick="goToEditAccount(this)">
+                                        Manage Account
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="sticky-footer" id="footer">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+            </div>
+        </div>
+    </footer>
+    </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/templates/vendor/jquery/jquery.min.js"></script>
+    <script src="/templates/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/templates/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/templates/js/sb-admin.min.js"></script>
+
+    <!-- Prevent form resend on refresh -->
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
+    <!-- Go to /edit-account/show-details while passing some info -->
+    <script>
+        function goToEditAccount(arg1) {
+            var td = arg1.parentNode;
+            email = td.previousSibling.previousSibling;
+            email_value = email.innerHTML;
+            dns = email.previousSibling.previousSibling;
+            dns_value = dns.innerHTML;
+
+            fetch('/edit-account', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    dnsName: String(dns_value),
+                    emailValue: String(email_value),
+                })
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

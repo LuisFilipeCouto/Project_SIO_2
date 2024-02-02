@@ -1,0 +1,201 @@
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Register</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+
+  <style>
+    .register-form h1 {
+      text-align: center;
+      font-size: 24px;
+      padding: 20px 0 20px 0;
+      font-family: sans-serif;
+    }
+
+    input[type=text],
+    input[type=email],
+    input[type=password] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: none;
+      background: #f1f1f1;
+    }
+
+    .registerbtn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 16px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .signin {
+      width: 100%;
+      padding: 16px;
+      margin: 8px 0;
+      background-color: #f1f1f1;
+      text-align: center;
+    }
+
+    #logoutForm {
+      position: absolute;
+      right: 10px;
+      top: 25%;
+    }
+
+    #footer {
+      position: fixed;
+      background-color: #212529;
+    }
+
+    #footer_image {
+      width: 100%;
+      height: 70px;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top" id="navbar">
+    <a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> Film Review Website</a>
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- SIDEBAR -->
+    <ul class="sidebar navbar-nav">
+
+      <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+        <li class="nav-item dropdown">
+
+          <a class="nav-link dropdown-toggle" id="pagesDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            &nbsp<i class="fas fa-sign-in-alt"></i>
+            <span>Login-Register</span>
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="/login">Login</a>
+            <a class="dropdown-item" href="/signup">Register</a>
+          </div>
+
+        </li>
+        <% } else{ %>
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              &nbsp<i class="fas fa-user-circle"></i>
+              <span>&nbspProfile</span></a>
+          </li>
+          <% } %>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/catalog">
+                &nbsp<i class="fas fa-fw fa-folder"></i>
+                <span>&nbspCatalog</span></a>
+            </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+        <div class="card mb-3">
+
+          <div class="card-header">
+
+            <% if(failed==1){ %>
+              <div class="alert alert-danger" role="alert">
+                An error has occurred! Please try again.
+              </div>
+              <% } else if(failed===2) { %>
+                <div class="alert alert-warning" role="alert">
+                  There is already an account registered with that email! Please try again.
+                </div>
+                <% } else if(failed==3){ %>
+                  <div class="alert alert-warning" role="alert">
+                    The input passwords don't match! Please try again.
+                  </div>
+                  <% } else{ %>
+                    <% } %>
+
+                      <!-- REGISTER-->
+                      <form action="/signup" method="post">
+                        <div class="register-form">
+
+                          <h1>Create new account</h1>
+
+                          <label for="username"><b>Username</b></label>
+                          <input type="text" placeholder="Enter Name" name="username" id="username" required>
+
+                          <label for="email"><b>Email</b></label>
+                          <input type="email" placeholder="Enter Email" name="email" id="email" required>
+
+                          <label for="password"><b>Password</b></label>
+                          <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+                          <label for="repeat_password"><b>Repeat Password</b></label>
+                          <input type="password" placeholder="Repeat Password" name="repeat_password"
+                            id="repeat_password" required>
+
+                          <button type="submit" class="registerbtn">Submit</button>
+                        </div>
+
+                        <div class="signin">
+                          <p>Already have an account? <a href="/login">Login</a>.</p>
+                        </div>
+                      </form>
+
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="sticky-footer" id="footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <img id="footer_image" src="Imagens/footer_image.png" alt="star_rating" style="width: auto" ; />
+            </div>
+          </div>
+
+        </footer>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+
+    <!-- Prevent form resend on refresh -->
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+
+</body>
+
+</html>

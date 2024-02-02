@@ -1,0 +1,193 @@
+<html lang="pt">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Home</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+	<!-- Page level plugin CSS-->
+	<link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+	<!-- Custom CSS para template-->
+	<link href="css/sb-admin.css" rel="stylesheet">
+
+	<!-- CSS para icons-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+		integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+	<style>
+		#container {
+			height: 100%;
+			width: 100%;
+		}
+
+		#logoutForm {
+			position: absolute;
+			right: 10px;
+			top: 25%;
+		}
+
+		#left-column {
+			float: left;
+			border: 1px;
+			width: 50%;
+			height: inherit;
+		}
+
+		#right-column {
+			float: left;
+			width: 50%;
+			display: block;
+			height: inherit;
+		}
+
+		#front_image {
+			max-width: 100%;
+			height: auto;
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		#footer {
+			position: fixed;
+			background-color: #212529;
+		}
+
+		#footer_image {
+			width: auto;
+			height: 70px;
+		}
+	</style>
+
+</head>
+
+<body id="page-top">
+
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-expand navbar-dark bg-dark static-top" id="navbar">
+		<a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> Film Review Website</a>
+
+		<% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+			<% } else{ %>
+				<form action="/logout?_method=DELETE" method="post" id="logoutForm">
+					<i class="fas fa-sign-out-alt" style="color: white;"></i> <button type="submit"
+						style="color: white; text-align: left; border: none; background-color: transparent;">Logout</button>
+				</form>
+				<% } %>
+	</nav>
+
+	<div id="wrapper">
+
+		<!-- SIDEBAR -->
+		<ul class="sidebar navbar-nav">
+
+			<% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+				<li class="nav-item dropdown">
+
+					<a class="nav-link dropdown-toggle" id="pagesDropdown" role="button" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">
+						&nbsp<i class="fas fa-sign-in-alt"></i>
+						<span>Login-Register</span>
+					</a>
+
+					<div class="dropdown-menu" aria-labelledby="pagesDropdown">
+						<a class="dropdown-item" href="/login">Login</a>
+						<a class="dropdown-item" href="/signup">Register</a>
+					</div>
+
+				</li>
+				<% } else{ %>
+
+					<li class="nav-item">
+						<a class="nav-link" href="/dashboard">
+							&nbsp<i class="fas fa-user-circle"></i>
+							<span>&nbspProfile</span></a>
+					</li>
+					<% } %>
+
+						<li class="nav-item">
+							<a class="nav-link" href="/catalog">
+								&nbsp<i class="fas fa-fw fa-folder"></i>
+								<span>&nbspCatalog</span></a>
+						</li>
+		</ul>
+
+		<div id="content-wrapper">
+
+			<div class="container-fluid">
+
+				<!-- WELCOME MESSAGE-->
+				<div class="card mb-3">
+					<div class="card-header">
+						<i class="fa fa-handshake-o" style="vertical-align: middle; font-size: 25px"></i>
+						Welcome <%= session.username %>!
+					</div>
+				</div>
+
+				<!-- WEBSITE INFO -->
+				<div class="card mb-3" id="#tabela_info">
+
+					<div id="container">
+						<div id="left-column">
+							In this website, you can navegate through a catalog of movies and see several details about them, such as:
+							<ul>
+								<li>Title</li>
+								<li>Date of Release</li>
+								<li>Genre</li>
+								<li>Producer</li>
+								<li>Average rating given by users</li>
+								<li>Comments made by users</li>
+								<li>Etc.</li>
+							</ul>
+
+							Functionalities include:
+							<ul>
+								<li>Search movie titles by whatever terms you wish.</li>
+								<li>See user profile and stats (requires creating account/login)</li>
+								<li>Rate movies (requires creating account/login)</li>
+								<li>Comment movies (requires creating account/login)</li>
+							</ul>
+							</p>
+						</div>
+
+						<div id="right-column">
+							<div class="card-body">
+								<img id="front_image" src="Imagens/home_image.png" alt="movie_icon" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- FOOTER -->
+		<footer class="sticky-footer" id="footer">
+			<div class="container my-auto">
+				<div class="copyright text-center my-auto">
+					<img id="footer_image" src="Imagens/footer_image.png" alt="star_rating" ; />
+				</div>
+			</div>
+		</footer>
+	</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="js/sb-admin.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Login</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+
+  <style>
+    .login-form {
+      width: 300px;
+      margin: 0 auto;
+      font-family: sans-serif;
+    }
+
+    .login-form h1 {
+      text-align: center;
+      font-size: 24px;
+      padding: 20px 0 20px 0;
+    }
+
+    .login-form input[type="email"],
+    .login-form input[type="password"] {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      background: #f1f1f1;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    .login-form input[type="submit"] {
+      width: 100%;
+      padding: 15px;
+      background-color: #535b63;
+      border: 0;
+      box-sizing: border-box;
+      cursor: pointer;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .loginbtn {
+      background-color: #04AA6D;
+      color: white;
+      padding: 16px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .register {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      background-color: #f1f1f1;
+      text-align: center;
+    }
+
+    #logoutForm {
+      position: absolute;
+      right: 10px;
+      top: 25%;
+    }
+
+    #footer {
+      position: fixed;
+      background-color: #212529;
+    }
+
+    #footer_image {
+      width: 100%;
+      height: 70px;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top" id="navbar">
+    <a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> Film Review Website</a>
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- SIDEBAR -->
+    <ul class="sidebar navbar-nav">
+
+      <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+        <li class="nav-item dropdown">
+
+          <a class="nav-link dropdown-toggle" id="pagesDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            &nbsp<i class="fas fa-sign-in-alt"></i>
+            <span>Login-Register</span>
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="/login">Login</a>
+            <a class="dropdown-item" href="/signup">Register</a>
+          </div>
+
+        </li>
+        <% } else{ %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              &nbsp<i class="fas fa-user-circle"></i>
+              <span>&nbspProfile</span></a>
+          </li>
+          <% } %>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/catalog">
+                &nbsp<i class="fas fa-fw fa-folder"></i>
+                <span>&nbspCatalog</span></a>
+            </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+        <div class="card mb-3">
+
+          <div class="card-header">
+
+            <% if(failed==1){ %>
+              <div class="alert alert-danger" role="alert">
+                An error has occurred! Please try again.
+              </div>
+              <% } else if (failed===2) { %>
+                <div class="alert alert-warning" role="alert">
+                  Invalid email or password! Please try again.
+                </div>
+                <% } else { %>
+                  <% } %>
+
+                    <!-- LOGIN WITH USERNAME-PASSWORD-->
+                    <body>
+                      <div class="login-form">
+                        <form action="/login" method="post">
+                          <h1>Log into Account</h1>
+                          <input type="email" name="email" placeholder="Email" name="emai" id="email" required>
+                          <input type="password" name="password" placeholder="Password" name="password" id="password"
+                            required>
+                          <button type="submit" class="loginbtn">Submit</button>
+                        </form>
+                        <div class="register">
+                          <p>Don't have an account yet?</p>
+                          <p><a href="/signup">Register</a></p>
+                        </div>
+                      </div>
+                    </body>
+
+                    <!-- LOGIN WITH UAP-->
+                    <form action="/uap-auth">
+                      <button type="submit" class="loginbtn">Authenticate with UAP </button>
+                    </form>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="sticky-footer" id="footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <img id="footer_image" src="Imagens/footer_image.png" alt="star_rating" style="width: auto" ; />
+            </div>
+          </div>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+
+    <!-- Prevent form resend on refresh -->
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Dashboard</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+
+  <style>
+    #container {
+      height: 100%;
+      width: 100%;
+    }
+
+    #left-column {
+      float: left;
+      border: 1px;
+      width: 50%;
+      height: inherit;
+    }
+
+    #right-column {
+      float: left;
+      width: 50%;
+      display: block;
+      height: inherit;
+    }
+
+    #logoutForm {
+      position: absolute;
+      right: 10px;
+      top: 25%;
+    }
+
+    input[type=password] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: none;
+      background: #f1f1f1;
+    }
+
+    #footer {
+      position: fixed;
+      background-color: #212529;
+    }
+
+    #footer_image {
+      width: 100%;
+      height: 70px;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top" id="navbar">
+    <a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> Film Review Website</a>
+
+    <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+      <% } else{ %>
+        <form action="/logout?_method=DELETE" method="post" id="logoutForm">
+          <i class="fas fa-sign-out-alt" style="color: white;"></i> <button type="submit"
+            style="color: white; text-align: left; border: none; background-color: transparent;">Logout</button>
+        </form>
+        <% } %>
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- SIDEBAR -->
+    <ul class="sidebar navbar-nav">
+
+      <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+        <li class="nav-item dropdown">
+
+          <a class="nav-link dropdown-toggle" id="pagesDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            &nbsp<i class="fas fa-sign-in-alt"></i>
+            <span>Login-Register</span>
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="/login">Login</a>
+            <a class="dropdown-item" href="/signup">Register</a>
+          </div>
+
+        </li>
+        <% } else{ %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              &nbsp<i class="fas fa-user-circle"></i>
+              <span>&nbspProfile</span></a>
+          </li>
+          <% } %>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/catalog">
+                &nbsp<i class="fas fa-fw fa-folder"></i>
+                <span>&nbspCatalog</span></a>
+            </li>
+    </ul>
+
+    <div id="content-wrapper">
+      <div class="container-fluid">
+
+        <% if(failed==1){ %>
+          <div class="alert alert-danger" role="alert">
+            An error has occurred! Please try again.
+          </div>
+          <% } else if(failed===2) { %>
+            <div class="alert alert-warning" role="alert">
+              Please choose a different new password!
+            </div>
+            <% } else if(failed===3) { %>
+              <div class="alert alert-warning" role="alert">
+                The new passwords don't match! Please try again.
+              </div>
+              <% } else if(failed==4){ %>
+                <div class="alert alert-warning" role="alert">
+                  Incorrect password! Please try again.
+                </div>
+                <% } else if (failed==5){ %>
+                  <div class="alert alert-success" role="alert">
+                    Your password has been updated!
+                  </div>
+                  <% } else{ %>
+                    <% } %>
+
+                      <!-- USER INFO -->
+                      <div class="card mb-3">
+
+                        <div class="card-header">
+
+                          <div id="container">
+
+                            <div id="left-column">
+
+                              <div class="container mt-5 d-flex justify-content-center">
+                                <div class="card p-4 mt-3">
+
+                                  <div class="first">
+                                    <h6 class="heading" style="text-align: center;">
+                                      <%=session.username %>
+                                    </h6>
+                                    <div class="time d-flex flex-row align-items-center justify-content-between mt-3">
+                                    </div>
+
+                                    <div class="second d-flex flex-row mt-2">
+                                      <div class="image mr-3"> <img src="Imagens/person_icon.png" class="rounded-circle"
+                                          width="75" />
+                                      </div>
+
+                                      <div class="">
+                                        <div class="d-flex flex-row mb-1" style="vertical-align: middle;">
+
+                                          <% if(avgRat==1){ %>
+
+                                            <span>Avg Movie Rating:</span>
+                                            <div class="ratings ml-2"><i class="fa fa-star"></i>
+                                            </div>
+
+                                            <% } else if(avgRat===2) { %>
+                                              <span>Avg Movie Rating:</span>
+                                              <div class="ratings ml-2"><i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                              </div>
+                                              <% } else if(avgRat===3) { %>
+                                                <span>Avg Movie Rating:</span>
+                                                <div class="ratings ml-2"><i class="fa fa-star"></i>
+                                                  <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                                                </div>
+                                                <% } else if(avgRat==4){ %>
+                                                  <span>Avg Movie Rating:</span>
+                                                  <div class="ratings ml-2"><i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                      class="fa fa-star"></i>
+                                                  </div>
+                                                  <% } else if (avgRat==5){ %>
+                                                    <span>Avg Movie Rating:</span>
+                                                    <div class="ratings ml-2"><i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                        class="fa fa-star"></i> <i class="fa fa-star"></i>
+                                                      <% } else{ %>
+                                                        <span>Avg Movie Rating: No Ratings Yet</span>
+                                                        <% } %>
+                                                    </div>
+
+                                                    <div class="d-flex flex-row mb-1" style="vertical-align: middle;">
+                                                      <span>
+                                                        <%= numRev %>
+                                                          Comments
+                                                      </span>
+                                                    </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div id="right-column">
+
+                                <div class="row justify-content-start" style="padding-top:10px;">
+                                  <label>Username</label>
+                                </div>
+                                <div class="row justify-content-center" style="padding-top:10px;">
+                                  <input id="usernameRow" class="form-control" value="<%= session.username%>"
+                                    readonly></input>
+                                </div>
+
+                                <div class="row justify-content-start" style="padding-top:10px;">
+                                  <label>Email</label>
+                                </div>
+                                <div class="row justify-content-start" style="padding-top:10px;">
+                                  <input class="form-control" value="<%= session.email%>" readonly></input>
+                                </div>
+
+                                <div class="row justify-content-start" style="padding-top:40px;">
+                                  <button id="alterPassBtn" class="btn btn-primary" onclick="showPassForm()">Change
+                                    Password</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- ALTER PASSWORD -->
+                          <div class="card mb-3" id="alterPassForm" style="visibility: hidden;">
+                            <div class="card-header">
+
+                              <form action="/alterPassword" method="post">
+                                <div class="register-form">
+
+                                  <label for="password"><b>Current Password</b></label>
+                                  <input type="password" placeholder="Password" name="current_password" required>
+
+                                  <label for="password"><b>New Password</b></label>
+                                  <input type="password" placeholder="New Password" name="new_password" required>
+
+                                  <label for="repeat_password"><b>Repeat New Password</b></label>
+                                  <input type="password" placeholder="Repeat New Password" name="repeat_new_password"
+                                    required>
+
+                                  <button type="submit" class="btn btn-primary">Confirm</button>
+                                  <button type="reset" class="btn btn-primary"
+                                    onclick="showPassForm()">Cancel</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="sticky-footer" id="footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <img id="footer_image" src="Imagens/footer_image.png" alt="star_rating" style="width: auto" ; />
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin.min.js"></script>
+
+  <!-- Prevent form resend on refresh -->
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+
+  <!-- Show password alteration form -->
+  <script>
+    function showPassForm() {
+      var x = document.getElementById("alterPassForm");
+      if (x.style.visibility === "hidden") {
+        x.style.visibility = "visible";
+        alterPassBtn.visibility = "hidden";
+      }
+      else {
+        x.style.visibility = "hidden";
+      }
+    }
+  </script>
+</body>
+
+</html>

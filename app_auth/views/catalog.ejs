@@ -1,0 +1,222 @@
+<html lang="pt">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Catalog</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Page level plugin CSS-->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+
+  <style>
+    #logoutForm {
+      position: absolute;
+      right: 10px;
+      top: 25%;
+    }
+
+    #footer {
+      position: fixed;
+      background-color: #212529;
+    }
+
+    #footer_image {
+      width: 100%;
+      height: 70px;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top" id="navbar">
+    <a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> Film Review Website</a>
+
+    <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+      <% } else{ %>
+        <form action="/logout?_method=DELETE" method="post" id="logoutForm">
+          <i class="fas fa-sign-out-alt" style="color: white;"></i> <button type="submit"
+            style="color: white; text-align: left; border: none; background-color: transparent;">Logout</button>
+        </form>
+        <% } %>
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- SIDEBAR -->
+    <ul class="sidebar navbar-nav">
+
+      <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+        <li class="nav-item dropdown">
+
+          <a class="nav-link dropdown-toggle" id="pagesDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            &nbsp<i class="fas fa-sign-in-alt"></i>
+            <span>Login-Register</span>
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="/login">Login</a>
+            <a class="dropdown-item" href="/signup">Register</a>
+          </div>
+
+        </li>
+        <% } else{ %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              &nbsp<i class="fas fa-user-circle"></i>
+              <span>&nbspProfile</span></a>
+          </li>
+          <% } %>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/catalog">
+                &nbsp<i class="fas fa-fw fa-folder"></i>
+                <span>&nbspCatalog</span></a>
+            </li>
+    </ul>
+
+    <div id="content-wrapper">
+      <div class="container-fluid">
+
+        <!-- SEARCH BAR -->
+        <div>
+          <input class="form-control" name="searchWord" id="keyword" placeholder="Search by movie title..."></input>
+        </div>
+
+        <div>
+          <button class="btn btn-primary" style="display: block; margin-top: 10px;"
+            onclick="searchTitle()">Submit</button> 
+        </div>
+
+      </div>
+
+      <div id="container">
+
+        <!-- LISTING OF FILM INFO -->
+        <table class="table table-borderless table-responsive card-1 p-4">
+          <thead>
+            <tr class="border-bottom">
+              <th> <span class="ml-2">ID Number</span> </th>
+              <th> <span class="ml-2">Title</span> </th>
+              <th> <span class="ml-2">Release Date</span> </th>
+              <th> <span class="ml-2">Genre</span> </th>
+              <th> <span class="ml-4">Producer</span> </th>
+            </tr>
+          </thead>
+          <tbody id="tableOfContents">
+            <% for (let i=0; i < movieSet.length; i++) { %>
+              <tr class="border-bottom">
+                <td>
+                  <div class="p-2"> <span class="d-block font-weight-bold">
+                      <a href="/movieReview/<%= movieSet[i].numSerie %>">
+                        <%= movieSet[i].numSerie %>
+                      </a>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div class="p-2 d-flex flex-row align-items-center mb-2">
+                    <div class="d-flex flex-column ml-2"> <span class="d-block font-weight-bold">
+                        <%= movieSet[i].title %>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="p-2"> <span class="font-weight-bold">
+                      <%= movieSet[i].releaseDate.toISOString().substring(0, 10)%>
+                    </span> </div>
+                </td>
+                <td>
+                  <div class="p-2 d-flex flex-column"> <span>
+                      <%= movieSet[i].genre%>
+                    </span></div>
+                </td>
+                <td>
+                  <div>
+                    <div class="p-2 d-flex flex-column"> <span>
+                        <%= movieSet[i].producer%>
+                      </span></div>
+                  </div>
+                </td>
+              </tr>
+              <% } %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="sticky-footer" id="footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <img id="footer_image" src="Imagens/footer_image.png" alt="star_rating" style="width: auto" ; />
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin.min.js"></script>
+
+
+  <script>
+    // Prevent form resend on refresh
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+
+    // Clear search bar on refresh
+    document.getElementById('keyword').value = '';
+
+    // Search movies by title
+    function searchTitle() {
+      var searchValue = document.getElementById("keyword").value;
+
+      fetch('/searchTitle', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          first: String(searchValue),
+        })
+      }).then(result => result.json()).then(parsedData => {
+        
+        var toc = document.getElementById("tableOfContents");
+        toc.innerHTML = "";
+        var tblHTML = "";
+
+        for (var i = 0; i < parsedData.movieSet.length; i++) {
+          tblHTML += "<tr class=\"border-bottom\"><td><div class=\"p-2\"> <span class=\"d-block font-weight-bold\"><a href='" + /movieReview/ + parsedData.movieSet[i].numSerie + "'>" + parsedData.movieSet[i].numSerie + "</a></span></div></td></td>";
+          tblHTML += "<td><div class=\"p-2 d-flex flex-row align-items-center mb-2\"><div class=\"d-flex flex-column ml-2\"><span class=\"d-block font-weight-bold\">" + parsedData.movieSet[i].title + "</div></div></td>";
+          tblHTML += "<td> <div class=\"p-2\"> <span class=\"font-weight-bold\">" + parsedData.movieSet[i].releaseDate.split("T")[0] + "</span> </div></td>";
+          tblHTML += "<td> <div class=\"p-2 d-flex flex-column\"> <span>" + parsedData.movieSet[i].genre + "</span></div></td>";
+          tblHTML += "<td><div><div class=\"p-2 d-flex flex-column\"> <span>" + parsedData.movieSet[i].producer + "</span></div></div></td>";
+        }
+        toc.innerHTML = tblHTML;
+      }).catch(err => console.log(err))
+    }
+  </script>
+
+</body>
+
+</html>

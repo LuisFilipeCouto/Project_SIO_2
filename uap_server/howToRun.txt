@@ -1,0 +1,13 @@
+1) Have MySQL Workbench installed with the following requirements:
+	host: 'localhost',
+	user: 'root',
+	password: 'SIO21G04'
+	MUST USE LEGACY AUTHENTICATION METHOD (RETAIN MYSQL 5.X COMPATIBILITY)
+
+2) Run file "dbScript_UAP.sql" located in the database_UAP folder, to create the needed database environment.
+
+3) While located in this directory, execute the following commands, by this order: 
+        1. sudo apt install default-libmysqlclient-dev
+        2. pip install -r requirements.txt
+
+4) While located in this directory, execute the command: python3 uap_server.py

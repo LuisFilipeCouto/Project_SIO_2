@@ -1,0 +1,168 @@
+<html lang="pt">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Generate Key</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="/templates/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+	<!-- Page level plugin CSS-->
+	<link href="/templates/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+	<!-- Custom CSS para template-->
+	<link href="/templates/css/sb-admin.css" rel="stylesheet">
+
+	<!-- CSS para icons-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+		integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+	<style>
+		.register-form h1 {
+			text-align: center;
+			font-size: 24px;
+			padding: 20px 0 20px 0;
+			font-family: sans-serif;
+		}
+
+		input[type=text],
+		input[type=password],
+		input[type=NIF] {
+			width: 95%;
+			padding: 15px;
+			margin: 5px 0 22px 0;
+			display: inline-block;
+			border: none;
+			background: #f1f1f1;
+		}
+
+		.registerbtn:enabled:active {
+			background-color: #008Fff;
+			color: white;
+			padding: 16px 20px;
+			margin: 8px 0;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+		}
+
+		.registerbtn:enabled {
+			background-color: #0080ff;
+			color: white;
+			padding: 16px 20px;
+			margin: 8px 0;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+		}
+
+		.registerbtn:disabled {
+			background-color: #0080ff;
+			opacity: 0.5;
+			color: white;
+			padding: 16px 20px;
+			margin: 8px 0;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+		}
+
+		#footer {
+			position: fixed;
+			background-color: #0080ff;
+			width: 100%;
+			height: 75px;
+		}
+	</style>
+
+</head>
+
+<body id="page-top" style="background-color: lightgrey;">
+
+	<!-- NAVBAR -->
+	<nav class="navbar navbar-expand navbar-dark bg-primary static-top" id="navbar" style="background-color: white">
+		<a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> User Authentication
+			Application</a>
+	</nav>
+
+	<div id="wrapper">
+
+		<div id="content-wrapper">
+
+			<div class="container-fluid">
+
+				<!-- KEY INFO -->
+				<div class="card mb-3" style="padding: 0px 20% 0px 20%">
+
+					<div id="container">
+						<div id="left-column">
+
+							<body>
+								<div style="text-align: center">
+									<h1 style="font-size: 40px"><b>This is your UAP Authorization Key:</b></h1>
+									<form action="/signup?name={{name}}&NIF={{nif}}" method="POST">
+										<input type="password" name="key" required="" id="id_key"
+											style="text-align: center;" value="{{userKey}}" readonly>
+										<i class="far fa-eye" id="togglePassword"
+											style="margin-left: -40px; cursor: pointer;"></i>
+										<p>
+											<b style="color: red;">This is a one time action! <p>
+												<p> You will not be able to alter or recover the key, <b>PLEASE SAVE IT!</b></p>
+												You will need it to log in the UAP and for any other authentication purposes.
+											</b>
+										<p>
+										<p><b>I understand:</b>
+											<input type="checkbox" name="chk" value='1' id='check'><br><br>
+											<input type="submit" disabled='disabled' class="registerbtn" value="Submit"></input>
+									</form>
+								</div>
+						</div>
+</body>
+
+<!-- FOOTER -->
+<footer class="sticky-footer" id="footer">
+	<div class="container my-auto">
+		<div class="copyright text-center my-auto">
+		</div>
+	</div>
+</footer>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/templates/vendor/jquery/jquery.min.js"></script>
+<script src="/templates/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/templates/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/templates/js/sb-admin.min.js"></script>
+
+<!-- Understood Checkbox-->
+<script>
+	$('#check').click(function () {
+		if ($(this).prop('checked') == true) {
+			$('input[type="submit"]').prop('disabled', false);
+		} else {
+			$('input[type="submit"]').prop('disabled', true);
+		}
+	});
+</script>
+
+<!-- Show and Hide Generated Authentication Key-->
+<script>
+	const togglePassword = document.querySelector('#togglePassword');
+	const password = document.querySelector('#id_key');
+
+	togglePassword.addEventListener('click', function (e) {
+		const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+		password.setAttribute('type', type);
+		this.classList.toggle('fa-eye-slash');
+	});
+</script>
+
+</html>

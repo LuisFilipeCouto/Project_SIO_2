@@ -1,0 +1,7 @@
+The UAP is implemented as a web app. The client can access it in several ways (UAP server must be running for this to succeed):
+
+    A) Access the URL: http://localhost:4000/
+
+    B) While located in this directory, execute the command: python3 uap_client.py
+        
+    C) Open the executable file "uap_client" located in this directory ---> TESTED ONLY IN Ubuntu x86_64 WITH THE FOLLOWING VERSIONS Python 2.7.18 and Python 3.8.10 (might not work with other OS or python versions)

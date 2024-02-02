@@ -1,0 +1,377 @@
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Reviews</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin.css" rel="stylesheet">
+
+    <style>
+        .column {
+            float: left;
+            width: 33.33%;
+        }
+
+        .rowInfo:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        #reviewC {
+            float: right;
+        }
+
+        #commentFormC {
+            float: left;
+        }
+
+        #logoutForm {
+            position: absolute;
+            right: 10px;
+            top: 25%;
+        }
+
+        #footer {
+            position: fixed;
+            background-color: #212529;
+        }
+
+        #footer_image {
+            width: 100%;
+            height: 70px;
+        }
+    </style>
+
+</head>
+
+<body id="page-top">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand navbar-dark bg-dark static-top" id="navbar">
+        <a class="navbar-brand mr-1" href="/"> <i class="fa fa-home" style="font-size:20px"></i> Film Review Website</a>
+
+        <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+            <% } else{ %>
+                <form action="/logout?_method=DELETE" method="post" id="logoutForm">
+                    <i class="fas fa-sign-out-alt" style="color: white;"></i> <button type="submit"
+                        style="color: white; text-align: left; border: none; background-color: transparent;">Logout</button>
+                </form>
+                <% } %>
+    </nav>
+
+    <div id="wrapper">
+
+        <!-- SIDEBAR -->
+        <ul class="sidebar navbar-nav">
+
+            <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" id="pagesDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        &nbsp<i class="fas fa-sign-in-alt"></i>
+                        <span>Login-Register</span>
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <a class="dropdown-item" href="/login">Login</a>
+                        <a class="dropdown-item" href="/signup">Register</a>
+                    </div>
+
+                </li>
+                <% } else{ %>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            &nbsp<i class="fas fa-user-circle"></i>
+                            <span>&nbspProfile</span></a>
+                    </li>
+                    <% } %>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/catalog">
+                                &nbsp<i class="fas fa-fw fa-folder"></i>
+                                <span>&nbspCatalog</span></a>
+                        </li>
+        </ul>
+
+        <div id="content-wrapper">
+            <div class="container-fluid">
+
+                <!-- Movie serial number, name and average rating -->
+                <div class="card mb-3">
+                    <div class="card-header">
+
+                        <div class="rowInfo">
+
+                            <div class="column">
+                                <i class="fa fa-film" style="vertical-align: middle; font-size: 25px"></i>
+                                <span>&nbsp<%= movieSet[0].title %></span></a>
+                            </div>
+
+                            <div class="column">
+                                <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+                                    Login to rate this movie!
+                                    <% } else{ %>
+                                        <% if(usrRate==null || usrRate==0){ %>
+                                            Your Rating : Not Rated
+                                            <% } else{ %>
+                                                Your Rating: <%= usrRate %>
+                                                    <% } %>
+                                                        <form>
+                                                            <input type="submit" value="Submit" onclick="rateMovie()">
+                                                            <select name="User" id="myselect">
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </form>
+                                                        <% } %>
+                            </div>
+
+                            <div class="column">
+                                <i class="fa fa-star"
+                                    style="vertical-align: middle; font-size: 25px; align-items: right;"></i>
+                                <span>&nbsp<%= avgRat %>/5 (<%=numRat%> Total Ratings)</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Section -->
+                <div id="reviewC">
+                    <div class="container mt-3 d-flex justify-content-center">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-md-8">
+
+                                <div class="text-left">
+                                    <h6 id="numComments">All comments (<%=numReviews%>)</h6>
+                                </div>
+
+                                <div id="reviewSection">
+                                    <% for (let i=0; i < reviewDet.length; i++) { %>
+                                        <div class="card p-3 mb-2">
+                                            <div class="d-flex flex-row"> <img src="/Imagens/person_icon.png"
+                                                    height="40" width="40" class="rounded-circle" style="padding:5px;"
+                                                    ;>
+                                                <div class="d-flex flex-column ms-2">
+                                                    <h6 class="mb-1 text-primary">
+                                                        <%=reviewDet[i].username %>
+                                                    </h6>
+                                                    <p class="postBody">
+                                                        <%-reviewDet[i].review%>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex flex-row"> <span class="text-muted fw-normal fs-10">
+                                                        <%=reviewDet[i].postDate %>
+                                                    </span> </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment Form Section -->
+                <div id="commentFormC">
+                    <div class="card">
+                        <div class="row">
+
+                            <div class="col-2"> <img src="/Imagens/person_icon.png" height="50" width="60"
+                                    class="rounded-circle"
+                                    style="padding-top: 10px; padding-left: 10px; padding-right: 10px;">
+                            </div>
+
+                            <div class="col-10">
+
+                                <div class="comment-box ml-2">
+
+                                    <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+                                        <div class="comment-area">
+                                            <textarea class="input" readonly
+                                                placeholder="Please login to comment on this movie!" rows="4"
+                                                maxlength="250" onkeyup="success()"></textarea>
+                                        </div>
+                                        <% } else{ %>
+                                </div>
+                                <% } %>
+
+                                    <div class="comment-btns mt-2">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div>
+                                                    <% if(typeof session.userId=='undefined' || session.userId <=0){ %>
+                                                        <% } else{ %>
+
+                                                            <input type="text" name="movieNumSerie" id="mvNumS"
+                                                                value="<%=movieSet[0].numSerie%>" hidden>
+                                                            <textarea class="input"
+                                                                placeholder="Comment on this movie...." rows="4"
+                                                                maxlength="250" id="commentBlock" name="commentToSave"
+                                                                onkeyup="success()"></textarea>
+
+                                                            <button id="confirmComment" class="btn btn-primary"
+                                                                disabled="false" onclick="postComment()"
+                                                                style="display: inline;">Confirm
+                                                            </button>
+
+                                                            <button id="cancelComment" type="reset"
+                                                                class="btn btn-primary" onclick="clearText()"
+                                                                style="display: inline;">Cancel
+                                                            </button>
+                                                            <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="sticky-footer" id="footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <img id="footer_image" src="/Imagens/footer_image.png" alt="star_rating" style="width: auto;" i />
+                </div>
+            </div>
+        </footer>
+    </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin.min.js"></script>
+
+    <script>
+
+        // Clear comment form on refresh
+        document.getElementById('commentBlock').value = '';
+
+        // Post comments
+        function postComment() {
+            var cmt = document.getElementById("commentBlock").value;
+            var myID = document.getElementById("mvNumS").value;
+
+            fetch('/postComment', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cmtToPost: String(cmt),
+                    mvToPost: String(myID),
+                })
+            }).then(result => result.json()).then(parsedData => {
+                var numCom = document.getElementById("numComments").innerText = "All comments (" + parsedData.reviewSet.length + ")";
+                var toc = document.getElementById("reviewSection");
+                var flexDiv = document.createElement('div');
+                var dFlex = document.createElement('div');
+                var commentImg = document.createElement('img');
+                var flexRow = document.createElement('div');
+                var userNameH = document.createElement('h6');
+                var userNamep = document.createElement('p');
+                var justContent = document.createElement('div');
+                var contentRow = document.createElement('div');
+                var contentSpan = document.createElement('span');
+
+                flexDiv.className = "card p-3 mb-2";
+                dFlex.className = "d-flex flex-now";
+                commentImg.src = "/Imagens/person_icon.png";
+                commentImg.style.height = 40;
+                commentImg.style.width = 40;
+                commentImg.style.padding = "5px";
+                commentImg.className = "rounded-circle";
+                flexRow.className = "d-flex flex-column ms-2";
+                userNameH.className = "mb-1 text-primary";
+                userNameH.innerHTML = parsedData.reviewSet[parsedData.reviewSet.length - 1].username;
+                userNamep.className = "postBody";
+                userNamep.innerHTML = parsedData.reviewSet[parsedData.reviewSet.length - 1].review;
+                justContent.className = "d-flex justify-content-between";
+                contentRow.className = "d-flex flex-row";
+                contentSpan.className = "text-muted fw-normal fs-10";
+                contentSpan.innerHTML = parsedData.reviewSet[parsedData.reviewSet.length - 1].postDate;
+
+                flexRow.appendChild(userNameH);
+                flexRow.appendChild(userNamep);
+                dFlex.appendChild(commentImg);
+                dFlex.appendChild(flexRow);
+                flexDiv.appendChild(dFlex);
+                contentRow.appendChild(contentSpan);
+                justContent.appendChild(contentRow);
+                flexDiv.appendChild(justContent);
+                toc.appendChild(flexDiv);
+
+            }).catch(err => console.log(err))
+
+            clearText();
+            success();
+        }
+
+        // Give Rating to Movie
+        function rateMovie() {
+            var rateGiven = document.getElementById("myselect")
+            var rt = rateGiven.options[rateGiven.selectedIndex].value;
+            var myID = document.getElementById("mvNumS").value;
+
+            fetch('/giveRating', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    rate: String(rt),
+                    mvToPost: String(myID),
+                })
+            }).then(result => result.json()).then(parsedData => {
+            }).catch(err => console.log(err))
+        }
+
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        function success() {
+            if (document.getElementById("commentBlock").value === "") {
+                document.getElementById('confirmComment').disabled = true;
+            }
+            else {
+                document.getElementById('confirmComment').disabled = false;
+            }
+        }
+
+        function clearText() {
+            document.getElementById("confirmComment").disabled = true;
+            document.getElementById("commentBlock").value = '';
+        }
+    </script>
+
+</body>
+
+</html>
